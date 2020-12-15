@@ -1,3 +1,4 @@
+<?php
 /**
  * ---------------------------------------------------------------------
  * GLPI - Gestionnaire Libre de Parc Informatique
@@ -27,15 +28,21 @@
  * You should have received a copy of the GNU General Public License
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
-*/
+ */
 
-@import "css/includes/base";
-@import "css/includes/global-variables";
+include ('../inc/includes.php');
 
-@import "css/includes/components/debug-pannel";
-@import "css/includes/components/fuzzy";
-@import "css/includes/components/global-menu";
-@import "css/includes/components/select2";
-@import "css/includes/components/user-menu";
+header('Content-Type: application/json; charset=UTF-8');
+Html::header_nocache();
 
-@import "css/includes/pages/search";
+Session::checkLoginUser();
+
+$user = new User();
+$success = $user->update(
+   [
+      'id'        => Session::getLoginUserID(),
+      'fold_menu' => (bool)$_SESSION['glpifold_menu'] ? 0 : 1,
+   ]
+);
+
+echo json_encode(['success' => $success]);
