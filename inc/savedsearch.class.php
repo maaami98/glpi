@@ -721,7 +721,7 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria {
    }
 
 
-   function getMine(string $itemtype = null):array {
+   function getMine(string $itemtype = null, bool $inverse = false):array {
       global $DB;
 
       $searches = [];
@@ -760,9 +760,15 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria {
       ];
 
       if ($itemtype != null) {
-         $criteria['WHERE']+= [
-            "$table.itemtype" => $itemtype
-         ];
+         if (!$inverse) {
+            $criteria['WHERE']+= [
+               "$table.itemtype" => $itemtype
+            ];
+         } else {
+            $criteria['WHERE']+= [
+               'NOT' => ["$table.itemtype" => $itemtype]
+            ];
+         }
       }
 
       $iterator = $DB->request($criteria);
