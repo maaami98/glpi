@@ -165,10 +165,10 @@ class Document extends CommonDBTM {
 
             if (unlink(GLPI_DOC_DIR."/".$this->fields["filepath"])) {
                Session::addMessageAfterRedirect(sprintf(__('Succesful deletion of the file %s'),
-                                                         GLPI_DOC_DIR."/".$this->fields["filepath"]));
+                                                         $CFG_GLPI["root_doc"]."/".$this->fields["filepath"]));
             } else {
                Session::addMessageAfterRedirect(sprintf(__('Failed to delete the file %s'),
-                                                        GLPI_DOC_DIR."/".$this->fields["filepath"]),
+                                                        $CFG_GLPI["root_doc"]."/".$this->fields["filepath"]),
                                                 false, ERROR);
             }
          }
@@ -1024,7 +1024,7 @@ class Document extends CommonDBTM {
             // TRANS: %1$s is the curent filename, %2$s is its directory
             Session::addMessageAfterRedirect(sprintf(__('Failed to delete the file %1$s (%2$s)'),
                                                      $input['current_filename'],
-                                                     GLPI_DOC_DIR."/".$input['current_filepath']),
+                                                     $CFG_GLPI["root_doc"]."/".$input['current_filepath']),
                                              false, ERROR);
          }
       }
@@ -1082,7 +1082,7 @@ class Document extends CommonDBTM {
       }
 
       if (!is_file($fullpath)) {
-         Session::addMessageAfterRedirect(sprintf(__('File %s not found.'), $fullpath),
+         Session::addMessageAfterRedirect(sprintf(__('File %s not found.'), $filename),
                                           false, ERROR);
          return false;
       }
@@ -1246,7 +1246,7 @@ class Document extends CommonDBTM {
 
       if (!is_dir(GLPI_DOC_DIR)) {
          Session::addMessageAfterRedirect(sprintf(__("The directory %s doesn't exist."),
-                                                  GLPI_DOC_DIR),
+                                                  $CFG_GLPI["root_doc"]),
                                           false, ERROR);
          return '';
       }
@@ -1255,12 +1255,12 @@ class Document extends CommonDBTM {
       if (!is_dir(GLPI_DOC_DIR."/".$subdir)
           && @mkdir(GLPI_DOC_DIR."/".$subdir, 0777, true)) {
          Session::addMessageAfterRedirect(sprintf(__('Create the directory %s'),
-                                                  GLPI_DOC_DIR."/".$subdir));
+                                                  $CFG_GLPI["root_doc"]."/".$subdir));
       }
 
       if (!is_dir(GLPI_DOC_DIR."/".$subdir)) {
          Session::addMessageAfterRedirect(sprintf(__('Failed to create the directory %s. Verify that you have the correct permission'),
-                                                  GLPI_DOC_DIR."/".$subdir),
+                                                  $CFG_GLPI["root_doc"]."/".$subdir),
                                           false, ERROR);
          return '';
       }
